@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>QCM - Partie 1</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+    .head{
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+    }
+    #score {
+      font-size: 24px;
+      font-weight: bold;
+      margin-bottom: 20px;
+    }
+    .question {
+      border: 1px solid #ccc;
+      background-color: rgb(110, 110, 250);
+      color:white;
+      padding: 15px;
+      margin-bottom: 20px;
+      border-radius: 7px;
+    }
+    #time {
+      font-size: 20px;
+      color: red;
+      font-weight: bold;
+      margin-top: 10px;
+    }
+    button {
+      padding: 10px 15px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div class="head">
+  <div id="score">Score: 0</div>
+  <div id="time" data-timer="30">Temps restant : <span class="time">30</span> s</div>
+  </div>
+  <div id="quiz-container">
+    <div class="question" data-answer="Paris">
+      <p>1. Quelle est la capitale du Maroc ?</p>
+      <form>
+        <label><input type="radio" name="q1" value="Paris"> Paris</label><br>
+        <label><input type="radio" name="q1" value="Lyon"> Lyon</label><br>
+        <label><input type="radio" name="q1" value="Marseille"> Marseille</label>
+      </form>
+
+    </div>
+    <div class="question" data-answer="4">
+      <p>2. Quel est le résultat de 2 + 2 ?</p>
+      <form>
+        <label><input type="radio" name="q2" value="3"> 3</label><br>
+        <label><input type="radio" name="q2" value="4"> 4</label><br>
+        <label><input type="radio" name="q2" value="5"> 5</label>
+      </form>
+    </div>
+  </div>
+  <button id="submit">Valider le QCM</button>
+
+  <script>
+
+    const questions = document.querySelectorAll('.question');
+    const scoreDisplay = document.getElementById('score');
+    const submitButton = document.getElementById('submit');
+    const timerElement = document.getElementById("time");
+    
+      let timeLeft = parseInt(timerElement.getAttribute('data-timer'));
+      const intervalId = setInterval(() => {
+        timeLeft--;
+        timerElement.textContent = "Temps restant: "+ timeLeft + " s";
+        if (timeLeft <= 0) {
+          timerElement.textContent = "Fin de Partie";
+          questions.forEach((question) => {
+          clearInterval(intervalId);
+          const radios = question.querySelectorAll('input[type="radio"]');
+          radios.forEach(radio => radio.disabled = true);
+          });
+        }
+      }, 1000);
+
+    submitButton.addEventListener('click', () => {
+      let score = 0;
+      questions.forEach((question) => {
+        questions.forEach((question) => {
+          clearInterval(intervalId);
+
+          const radios = question.querySelectorAll('input[type="radio"]');
+          radios.forEach(radio => radio.disabled = true);
+          });
+        const correctAnswer = question.getAttribute('data-answer');
+        const selected = question.querySelector('input[type="radio"]:checked');
+        if (selected && selected.value === correctAnswer) {
+          score++;
+        }
+      });
+      scoreDisplay.textContent = 'Score: ' + score + ' / ' + questions.length;
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      timerElement.textContent = "Fin de Partie";
+    });
+  </script>
+</body>
+</html>
