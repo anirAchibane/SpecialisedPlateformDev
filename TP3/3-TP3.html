@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Projet 1-38</title>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <style>
+        body{
+            display: flex; flex-direction: column;
+            font-family: Arial, Helvetica, sans-serif;
+            align-items: center; justify-content: center;
+        }
+        .taskChoose{
+            display: flex;
+            flex-direction: row;
+            border-top-left-radius: 20px; border-top-right-radius: 20px; 
+            background-color: rgb(10, 10, 119); color: white;
+            width: 50%; height: 60px;
+            justify-content: center; align-items: center; gap:20px;
+        }
+        .taskHead{
+            display: flex; justify-content: space-between; 
+            width: 100%;
+            font-weight: bold;
+        }
+        .description{
+            display: flex; flex-direction: row; justify-content: space-between;
+            color: gray;
+        }
+        .taskCount{
+            display: flex; justify-content: center; align-items: center;
+            border-bottom-left-radius: 20px; border-bottom-right-radius: 20px; 
+            background-color: rgb(10, 10, 119); color:white;
+            width: 50%; height: 60px;
+        }
+        .finishButton{
+            height: 30px; border: none; border-radius: 5px;
+            background-color: rgb(50, 204, 50); color: white;
+            position: relative; bottom: 5px;
+        }
+        .finishButton:hover{
+            cursor: pointer; opacity: 70%;
+        }
+        .show{
+            display: inline;
+        }
+        .hide{
+            display: none;
+        }
+        li{
+            display: flex; flex-direction: column; 
+            justify-content: space-between;
+        }
+    </style>
+</head>
+
+<body id="app">
+
+    <div v-bind:class="taskChoose">
+        <label>Tâches terminés</label>
+        <input type="checkbox" v-model="Finished">
+        <label>Tâches en cours</label>
+        <input type="checkbox" v-model="toFinish">
+    </div>
+
+    <div>
+        <ul v-for="task in taskList">
+            <li v-if="(task.completed && Finished && !toFinish) || ((!task.completed && !Finished && toFinish) || (toFinish && Finished))">
+               <div class="taskHead">{{task.title}} <input type="checkbox" name={{task.id}} v-model=task.completed disabled="true"></div>
+               <p class="description"> {{task.description}} 
+                <button class="finishButton" v-show="!task.completed" v-on:click="finishTask(task)">Terminer</button>
+               </p>
+            </li>
+        </ul>
+    </div>
+    <div v-bind:class="taskCount">
+        <p>Nombre de tâches: {{count}}</p>
+    </div>
+
+    <script>
+
+        const app = Vue.createApp({
+            data(){
+                return {
+                    taskChoose: "taskChoose",
+                    taskCount: "taskCount",
+                    taskList: [],
+                    Finished: true,
+                    toFinish: true,
+
+                }
+            },
+            computed: {
+                count(){
+                    let taskcount = 0;
+                    for(task in this.taskList){
+                        taskcount++;
+                    }
+                    return taskcount;
+                }
+            },
+            methods: {
+                finishTask(task){
+                    task.completed = true;
+                }
+            },
+            mounted() {
+                fetch("taskList.json").then(response => response.json())
+                .then(data => {
+                    this.taskList = data;
+                })
+            }
+        });
+
+        app.mount('#app');
+    </script>
+</body>
+
+</html>
