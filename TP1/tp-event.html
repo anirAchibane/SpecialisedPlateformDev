@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8" />
+<title>Manipulation de vue</title>
+<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+</head>
+<body>
+
+<div id="monapp">
+
+	<button v-on:click="cliquerMoi">{{titre}}</button>
+
+	<div :style="{display:' flex', flexDirection:'row', gap:'10px', paddingTop:'10px', height:'40px'}" >
+		<button v-on:click="plus()">++</button>
+		<p>{{compteur}}</p>
+		<button v-on:click="moins()">--</button>
+	</div>
+	
+	<input @input="spaceCheck()" type="text" v-model="textInput">
+	<p v-show="rappel">La chaîne ne doit pas contenir d'espaces!!</p>
+</div>
+
+<script>
+	const appli = {
+		data(){
+			return{
+				titre: "Cliquer moi",
+				compteur: 0,
+				rappel: "",
+				textInput: "",
+				rappel: false,
+			}
+		},
+		methods: {
+			cliquerMoi(){
+				this.titre = "Cliqué";
+			},
+			plus(){
+				this.compteur++;
+			},
+			moins(){
+				if (this.compteur > 0){
+					this.compteur--;
+				}
+			},
+			spaceCheck(){
+				console.log("something");
+				if (/\s/.test(this.textInput)){
+					this.rappel = true;
+				}
+				else{
+					this.rappel = false;
+				}
+			}
+		}
+	};
+	
+Vue.createApp(appli).mount("#monapp");
+</script>
+
+</body>
+</html>
