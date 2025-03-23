@@ -19,6 +19,10 @@ npm run build
 ```
 npm run lint
 ```
+### Setup json Server
+```
+npx json-server blog.json
+``` 
 
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
